@@ -8,6 +8,7 @@ import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
 import AccountItem from '~/components/AccountItem';
 import { SearchIcon } from '~/components/Icons';
+import { useDebounce } from '~/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,9 @@ function Search() {
     const [searchResult, setSearchResult] = useState([]);
     const [searchText, setSearchText] = useState('');
     const [showResultt, setShowResult] = useState(true);
+    const [loading, setLoading] = useState(false);
+
+    const debounce = useDebounce(searchText, 500);
 
     const inputRef = useRef();
 
@@ -29,8 +33,21 @@ function Search() {
     };
 
     useEffect(() => {
-        setTimeout(() => setSearchResult([3, 4, 6]), 0);
-    }, []);
+        if (!debounce.trim()) {
+            setSearchResult([]);
+            return;
+        }
+        setLoading(true);
+        fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounce)}&type=less`)
+            .then((res) => res.json())
+            .then((res) => {
+                setSearchResult(res.data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setLoading(false);
+            });
+    }, [debounce]);
 
     return (
         <HeadlessTippy
@@ -40,10 +57,9 @@ function Search() {
                 <div className={cx('search-result')} tabIndex="-1" {...attrs}>
                     <PopperWrapper>
                         <label className={cx('search-title')}>Accounts</label>
-                        <AccountItem />
-                        <AccountItem />
-                        <AccountItem />
-                        <AccountItem />
+                        {searchResult.map((e) => {
+                            return <AccountItem key={e.id} data={e} />;
+                        })}
                     </PopperWrapper>
                 </div>
             )}
@@ -58,12 +74,12 @@ function Search() {
                     placeholder="Search accounts and videos"
                     spellCheck={false}
                 />
-                {!!searchText && (
+                {!!searchText && !loading && (
                     <button className={cx('clear-btn')} onClick={handleClickClear}>
                         <FontAwesomeIcon icon={faCircleXmark} />
                     </button>
                 )}
-                {/* <FontAwesomeIcon className={cx('loading')} icon={faSpinner} /> */}
+                {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
 
                 <button className={cx('search-btn')}>
                     <SearchIcon />
