@@ -1,17 +1,19 @@
-//Layout
-import { HeaderOnly } from '~/components/Layout';
+import config from '~/config';
 
-import routes from '~/config/routes';
-import Home from '~/Pages/Home';
-import Following from '~/Pages/Following';
-import Upload from '~/Pages/Upload';
-import Profile from '~/Pages/Profile';
+//Layout
+import { HeaderOnly } from '~/layouts';
+
+//Page
+import Home from '~/pages/Home';
+import Following from '~/pages/Following';
+import Upload from '~/pages/Upload';
+import Profile from '~/pages/Profile';
 
 const publicRoutes = [
-    { path: routes.root, component: Home },
-    { path: routes.following, component: Following },
-    { path: routes.profile, component: Profile },
-    { path: routes.upload, component: Upload, layout: HeaderOnly },
+    { path: config.routes.root, component: Home },
+    { path: config.routes.following, component: Following },
+    { path: config.routes.profile, component: Profile },
+    { path: config.routes.upload, component: Upload, layout: HeaderOnly },
 ];
 
 const privateRoutes = [];
