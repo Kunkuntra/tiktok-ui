@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import HeadlessTippy from '@tippyjs/react/headless';
@@ -7,19 +7,19 @@ import classNames from 'classnames/bind';
 import * as searchService from '~/services/searchService';
 import styles from './Search.module.scss';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
-import AccountItem from '~/components/AccountItem';
 import { SearchIcon } from '~/components/Icons';
 import { useDebounce } from '~/hooks';
+import ListSearchs from './ListSearchs';
 
 const cx = classNames.bind(styles);
 
 function Search() {
   const [searchResult, setSearchResult] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [showResultt, setShowResult] = useState(true);
+  const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const debounce = useDebounce(searchText, 500);
+  const debouncedValue = useDebounce(searchText, 500);
 
   const inputRef = useRef();
 
@@ -34,20 +34,20 @@ function Search() {
   };
 
   useEffect(() => {
-    if (!debounce.trim()) {
+    if (!debouncedValue.trim()) {
       setSearchResult([]);
       return;
     }
 
     const fetchApi = async () => {
       setLoading(true);
-      const result = await searchService.search(debounce);
+      const result = await searchService.search(debouncedValue);
       setSearchResult(result);
       setLoading(false);
     };
 
     fetchApi();
-  }, [debounce]);
+  }, [debouncedValue]);
 
   const handleChange = (e) => {
     const searchValue = e.target.value;
@@ -56,25 +56,23 @@ function Search() {
     }
   };
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setSearchText('');
     setSearchResult([]);
     inputRef.current.blur();
-  };
+  }, []);
 
   return (
     <span>
       <HeadlessTippy
         interactive
-        visible={searchResult.length > 0 && showResultt}
+        visible={searchResult.length > 0 && showResult}
         // visible
         render={(attrs) => (
           <div className={cx('search-result')} tabIndex="-1" {...attrs}>
             <PopperWrapper>
               <label className={cx('search-title')}>Accounts</label>
-              {searchResult.map((e) => {
-                return <AccountItem key={e.id} data={e} onClick={clearSearch} />;
-              })}
+              <ListSearchs data={searchResult} clearSearch={clearSearch} />
             </PopperWrapper>
           </div>
         )}

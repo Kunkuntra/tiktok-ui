@@ -1,118 +1,104 @@
 @import 'normalize.css';
 :root {
-    --font-main: 'TikTokFont', sans-serif;
-    --primary: rgb(254, 44, 85);
-    --black: #000;
-    --white: #ffffff;
-    --text-color: #161823;
+  --font-main: 'TikTokFont', sans-serif;
+  --primary: rgb(254, 44, 85);
+  --black: #000;
+  --white: #ffffff;
+  --text-color: #161823;
 
-    //Default layout
-    --default-layout-header-height: 60px;
-    --default-layout-width: 1150px;
-    --default-layout-horizontal-spacer: 24px;
+  //Default layout
+  --default-layout-header-height: 60px;
+  --default-layout-width: 1150px;
+  --default-layout-horizontal-spacer: 24px;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    font-family: var(--font-main);
-    font-size: 62.5%;
-    font-weight: 400;
+  font-family: var(--font-main);
+  font-size: 62.5%;
+  font-weight: 400;
 }
 body {
-    margin: 0;
-    padding: 0;
-    font-family: var(--font-main);
-    font-optical-sizing: auto;
-    font-size: 1.6rem;
-    font-style: normal;
-    font-variation-settings: 'wdth' 100;
-    line-height: 1.5;
-    text-rendering: optimizeSpeed;
-    color: var(--text-color);
-    overflow-y: overlay;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  font-optical-sizing: auto;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-variation-settings: 'wdth' 100;
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+  color: var(--text-color);
+  overflow-y: overlay;
 }
 //Scrollbar CSS
 html *::-webkit-scrollbar {
-    border-radius: 0;
-    width: 8px;
-}
-
-html *::-webkit-scrollbar {
-    border-radius: 0;
-    width: 8px;
+  border-radius: 0;
+  width: 8px;
 }
 
 html *::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.15);
-}
-
-html *::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
 html *::-webkit-scrollbar-track {
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
-}
-html *::-webkit-scrollbar-track {
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 button,
 input,
 [tabindex] {
-    outline: none;
-    border: none;
+  outline: none;
+  border: none;
 }
 
-a[href] {
-    color: var(--text-color);
-    text-decoration: none;
+a {
+  color: var(--text-color);
+  text-decoration: none;
 }
 
 //Fonts emmbeded
 @font-face {
-    font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Regular.woff2');
-    font-weight: 400;
+  font-family: TikTokFont;
+  src: url('/assets/fonts/TikTokFont-Regular.woff2');
+  font-weight: 400;
 }
 @font-face {
-    font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Semibold.woff2');
-    font-weight: 600;
+  font-family: TikTokFont;
+  src: url('/assets/fonts/TikTokFont-Semibold.woff2');
+  font-weight: 600;
 }
 @font-face {
-    font-family: TikTokDisplayFont;
-    src: url('/assets/fonts/TikTokDisplayFont-Bold.woff2');
-    font-weight: 700;
+  font-family: TikTokDisplayFont;
+  src: url('/assets/fonts/TikTokDisplayFont-Bold.woff2');
+  font-weight: 700;
 }
 @font-face {
-    font-family: TikTokFont;
-    src: url('/assets/fonts/TikTokFont-Bold.woff2');
-    font-weight: 700;
+  font-family: TikTokFont;
+  src: url('/assets/fonts/TikTokFont-Bold.woff2');
+  font-weight: 700;
 }
 
 //Custom tippy tooltip
 body {
-    .tippy-box {
-        background-color: rgba(84, 84, 84, 0.92);
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 1.6rem;
-        line-height: 2.2rem;
-    }
-    .tippy-arrow {
-        color: rgba(84, 84, 84, 0.92);
-    }
-    .tippy-content {
-        padding: 8px 9px;
-    }
+  .tippy-box {
+    background-color: rgba(84, 84, 84, 0.92);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+  }
+  .tippy-arrow {
+    color: rgba(84, 84, 84, 0.92);
+  }
+  .tippy-content {
+    padding: 8px 9px;
+  }
 }

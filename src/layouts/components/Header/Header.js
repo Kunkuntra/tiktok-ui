@@ -81,7 +81,7 @@ function Header() {
   const handleMenuChange = (MenuItem) => {
     console.log(MenuItem);
   };
-  const currentUser = true;
+  const currentUser = false;
   return (
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
