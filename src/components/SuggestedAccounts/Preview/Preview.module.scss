@@ -1,0 +1,55 @@
+//Preview
+.preview {
+  width: 318px;
+}
+.header-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 0 20px;
+}
+.avatar-preview {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.preview-info {
+  padding: 20px 20px 8px 20px;
+
+  &:p {
+    color: #161823;
+  }
+}
+.nickname {
+  font-size: 1.6rem;
+  color: #161823;
+  line-height: 1;
+}
+.check {
+  margin-left: 4px;
+  font-size: 1.4rem;
+  color: #20d5ec;
+}
+.name {
+  font-size: 1.2rem;
+  color: #161823bf;
+}
+.achieve {
+  display: flex;
+  padding: 0 20px 20px 20px;
+}
+.achieve-item {
+  font-size: 1.6rem;
+}
+.achieve-item + .achieve-item {
+  margin-left: 8px;
+}
+.quantity {
+  color: #161823;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.name-achieve {
+  color: #161823bf;
+}
