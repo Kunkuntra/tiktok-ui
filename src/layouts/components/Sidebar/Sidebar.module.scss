@@ -1,4 +1,42 @@
 .wrapper {
-  width: 356px;
+  width: 300px;
   padding: 20px 0 26px 0px;
+}
+
+.suggested-login {
+  border: 16px 0;
+  border-top: 1px solid #e3e3e4;
+}
+.title-login {
+  box-sizing: border-box;
+  color: rgba(22, 24, 35, 0.5);
+  font-size: 16px;
+  font-weight: 400;
+  height: 40px;
+  line-height: 20px;
+  margin: 16px 0;
+}
+
+//footer sidebar
+.footer-sidebar {
+  margin-top: 20px;
+  border: 16px 0;
+  border-top: 1px solid #e3e3e4;
+}
+.footer-line {
+  margin-top: 10px;
+}
+.footer-element {
+  color: rgba(22, 24, 35, 0.5);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.8rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.footer-element + .footer-element {
+  margin-left: 8px;
 }
