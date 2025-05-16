@@ -1,0 +1,36 @@
+.video-wrapper {
+  width: 400px;
+  height: 625px;
+  margin-left: 62px;
+  margin-top: 12px;
+  background-color: black;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 8px;
+}
+
+.video {
+  border-radius: 4px;
+  height: 100%;
+  width: 100%;
+}
+
+.action-pause {
+  color: var(--white);
+  cursor: pointer;
+  position: absolute;
+  bottom: 40px;
+  left: 28px;
+  font-size: 2rem;
+}
+.action-mute {
+  color: var(--white);
+  cursor: pointer;
+  position: absolute;
+  bottom: 40px;
+  right: 28px;
+  font-size: 2rem;
+}
