@@ -16,7 +16,7 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function Sidebar() {
-  const currentUser = false;
+  const currentUser = true;
   return (
     <aside className={cx('wrapper')}>
       <Menu>
@@ -36,7 +36,7 @@ function Sidebar() {
       ) : (
         <div className={cx('suggested-login')}>
           <h4 className={cx('title-login')}>Đăng nhập để follow các tác giả, thích và xem các bình luận</h4>
-          <Button full outline>
+          <Button full large outline>
             Log in
           </Button>
         </div>

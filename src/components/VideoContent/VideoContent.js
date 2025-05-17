@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './VideoContent.module.scss';
@@ -8,29 +9,29 @@ import { CommentIcon, FavouriteIcon, HeartIcon, ShareIcon } from '~/components/I
 
 const cx = classNames.bind(styles);
 
-function VideoContent() {
+const VideoContent = forwardRef((props, ref) => {
+  const { user, description, file_url, shares_count, comments_count, likes_count } = props;
+
   return (
-    <div className={cx('wrapper')}>
+    <div className={cx('wrapper')} ref={ref}>
       <header className={cx('header')}>
-        <Image
-          className={cx('avatar')}
-          src="https://tse2.mm.bing.net/th?id=OIP.5X5mJHdAdVpngropYGuKVQHaHa&pid=Api&P=0&h=220"
-          alt=""
-        />
+        <Image className={cx('avatar')} src={user.avatar} alt="" />
         <p className={cx('info')}>
-          <span className={cx('info-name')}>Nguyen Van A</span>
-          <span className={cx('desc-video')}>adu</span>
+          <span className={cx('info-name')}>
+            {user.first_name} {user.last_name}
+          </span>
+          <span className={cx('desc-video')}>{description}</span>
         </p>
         <Button outline>Follow</Button>
       </header>
       <div className={cx('video-content')}>
-        <Video />
+        <Video linkvid={file_url} />
         <div className={cx('list-actions')}>
           <span className={cx('item-action')}>
             <button className={cx('icon')}>
               <ShareIcon />
             </button>
-            <p className={cx('count')}>19</p>
+            <p className={cx('count')}>{shares_count}</p>
           </span>
           <span className={cx('item-action')}>
             <button className={cx('icon')}>
@@ -42,18 +43,18 @@ function VideoContent() {
             <button className={cx('icon')}>
               <CommentIcon />
             </button>
-            <p className={cx('count')}>20</p>
+            <p className={cx('count')}>{comments_count}</p>
           </span>
           <span className={cx('item-action')}>
             <button className={cx('icon')}>
               <HeartIcon />
             </button>
-            <p className={cx('count')}>20</p>
+            <p className={cx('count')}>{likes_count}</p>
           </span>
         </div>
       </div>
     </div>
   );
-}
+});
 
 export default VideoContent;
