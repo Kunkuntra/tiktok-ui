@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import styles from './SuggestedAccounts.module.scss';
@@ -34,9 +35,13 @@ function SuggestedAccounts({ label, isFollow = false }) {
   return (
     <div className={cx('wrapper')}>
       <p className={cx('label')}>{label}</p>
-      {accounts.map((e) => (
-        <AccountItem key={e.id} isFollow={isFollow} {...e} />
-      ))}
+      {accounts.map((e) => {
+        return (
+          <Link to={`/@${e.nickname}`} key={e.id}>
+            <AccountItem isFollow={isFollow} {...e} />
+          </Link>
+        );
+      })}
 
       <p onClick={handleClickMore} className={cx('more-btn')}>
         {seeMoreBtn ? 'Less than' : 'See more'}

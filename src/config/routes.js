@@ -4,6 +4,7 @@ const routes = {
   upload: '/upload',
   profile: '/:nickname',
   live: '/live',
+  video: '/video/:id',
 };
 
 export default routes;

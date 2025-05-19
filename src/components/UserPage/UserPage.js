@@ -2,50 +2,54 @@ import classNames from 'classnames/bind';
 import styles from './UserPage.module.scss';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import GridVideos from '../GridVideos';
+import user from '~/services/getUserService';
 
 const cx = classNames.bind(styles);
 
-function UserPage() {
+function UserPage({ userName }) {
   const VIDEOS = 'videos';
   const LIKED_VIDEOS = 'liked';
 
   const [location, setLocation] = useState(VIDEOS);
+  const [getUser, setGetUser] = useState(null);
 
-  const handleActiveVideos = () => {
-    setLocation(VIDEOS);
-  };
-  const handleActiveLiked = () => {
-    setLocation(LIKED_VIDEOS);
-  };
+  useLayoutEffect(() => {
+    const fetchApi = async () => {
+      const result = await user(userName);
+      setGetUser(result);
+    };
+    fetchApi();
+  }, [userName]);
+
+  const handleActiveVideos = () => setLocation(VIDEOS);
+  const handleActiveLiked = () => setLocation(LIKED_VIDEOS);
+
+  if (!getUser) return null;
 
   return (
     <div className={cx('wrapper')}>
       <div className={cx('head')}>
         <div className={cx('header')}>
-          <Image
-            className={cx('avatar')}
-            src="https://i.pinimg.com/736x/d6/38/0c/d6380cde0192eb4fd7d25d7cdd63912d.jpg"
-            alt=""
-          />
+          <Image className={cx('avatar')} src={getUser.avatar} alt="" />
           <span className={cx('user-info')}>
-            <p className={cx('name')}>gang4clone</p>
-            <p className={cx('nickname')}>DuyJKA Thinhk</p>
+            <p className={cx('name')}>
+              {getUser.last_name} {getUser.first_name}
+            </p>
+            <p className={cx('nickname')}>{getUser.nickname}</p>
             <Button primary>Follow</Button>
           </span>
         </div>
         <div className={cx('popularity')}>
-          <span className={cx('count')}>26</span>
-          <span className={cx('name-type')}>Following</span>
-          <span className={cx('count')}>12</span>
-          <span className={cx('name-type')}>Follower</span>
-          <span className={cx('count')}>17</span>
+          <span className={cx('count')}>{getUser.followings_count}</span>
+          <span className={cx('name-type')}>Followings</span>
+          <span className={cx('count')}>{getUser.followers_count}</span>
+          <span className={cx('name-type')}>Followers</span>
+          <span className={cx('count')}>{getUser.likes_count}</span>
           <span className={cx('name-type')}>Likes</span>
         </div>
-        <div className={cx('description')}>
-          ✨ 1998 ✨ Vietnam 🇻🇳 ĐỪNG LẤY VIDEO CỦA TÔI ĐI SO SÁNH NỮA. XIN HÃY TÔN TRỌNG !
-        </div>
+        <div className={cx('description')}>{getUser.bio}</div>
 
         <div className={cx('wrapper-videos')}>
           <div className={cx('menu-items')}>
@@ -69,9 +73,10 @@ function UserPage() {
         </div>
       </div>
       <div className={cx('video-user')}>
-        <GridVideos />
+        <GridVideos data={getUser.videos} />
       </div>
     </div>
   );
 }
+
 export default UserPage;

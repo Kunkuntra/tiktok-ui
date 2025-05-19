@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
 import styles from './VideoContent.module.scss';
@@ -10,22 +11,22 @@ import { CommentIcon, FavouriteIcon, HeartIcon, ShareIcon } from '~/components/I
 const cx = classNames.bind(styles);
 
 const VideoContent = forwardRef((props, ref) => {
-  const { user, description, file_url, shares_count, comments_count, likes_count } = props;
+  const { id, user, description, file_url, shares_count, comments_count, likes_count } = props;
 
   return (
     <div className={cx('wrapper')} ref={ref}>
       <header className={cx('header')}>
         <Image className={cx('avatar')} src={user.avatar} alt="" />
         <p className={cx('info')}>
-          <span className={cx('info-name')}>
+          <Link to={`/@${user.nickname}`} className={cx('info-name')}>
             {user.first_name} {user.last_name}
-          </span>
+          </Link>
           <span className={cx('desc-video')}>{description}</span>
         </p>
         <Button outline>Follow</Button>
       </header>
       <div className={cx('video-content')}>
-        <Video linkvid={file_url} />
+        <Video idVideo={id} linkvid={file_url} />
         <div className={cx('list-actions')}>
           <span className={cx('item-action')}>
             <button className={cx('icon')}>

@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 import { faPause, faPlay, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 
@@ -7,7 +8,7 @@ import styles from './Video.module.scss';
 
 const cx = classNames.bind(styles);
 
-function Video({ linkvid }) {
+function Video({ linkvid, idVideo }) {
   const [isPlay, setIsPlay] = useState(false);
   const [isMute, setIsMute] = useState(true);
   const videoRef = useRef();
@@ -59,10 +60,12 @@ function Video({ linkvid }) {
 
   return (
     <div className={cx('video-wrapper')}>
-      <video ref={videoRef} className={cx('video')} playsInline>
-        <source src={linkvid} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <Link to={`/video/${idVideo}`}>
+        <video ref={videoRef} className={cx('video')} playsInline>
+          <source src={linkvid} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </Link>
       <span onClick={handlePause} className={cx('action-pause')}>
         {isPlay ? <FontAwesomeIcon icon={faPause} /> : <FontAwesomeIcon icon={faPlay} />}
       </span>
