@@ -1,0 +1,27 @@
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; // chiếm full chiều cao màn hình (có thể chỉnh nếu dùng trong khung nhỏ)
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 6px solid #ccc;
+  border-top-color: #4f46e5; // màu tím đẹp, bạn đổi theo ý thích
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.loading-text {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #4f46e5;
+  font-weight: 600;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
