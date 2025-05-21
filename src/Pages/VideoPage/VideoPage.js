@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMusic, faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
@@ -8,16 +8,21 @@ import Image from '~/components/Image';
 import Button from '~/components/Button';
 import { CommentIcon, FavouriteIcon, HeartIcon } from '~/components/Icons';
 import getAVideo from '~/services/getAVideo';
+import { useAuth } from '~/Contexts/authContext';
+import { likeVideo, unLikeVideo } from '~/services/likeVideo';
 
 const cx = classNames.bind(styles);
 
 function VideoPage() {
   const { id } = useParams();
   console.log(id);
+  const navigate = useNavigate();
 
   const [isPlay, setIsPlay] = useState(false);
   const [isMute, setIsMute] = useState(true);
+  const [isLike, setIsLike] = useState(false);
   const videoRef = useRef();
+  const { token } = useAuth();
 
   const [getVideo, setGetVideo] = useState();
   useEffect(() => {
@@ -25,6 +30,7 @@ function VideoPage() {
       const result = await getAVideo(id);
       // console.log(result);
       setGetVideo(result);
+      setIsLike(result.is_liked);
     };
     fetchApi();
   }, [id]);
@@ -44,6 +50,23 @@ function VideoPage() {
       const newMute = !isMute;
       videoRef.current.muted = newMute;
       setIsMute(newMute);
+    }
+  };
+  const handleLikeVD = async () => {
+    try {
+      if (!token) {
+        alert('Bạn cần đăng nhập để thả tim.');
+        return navigate('/login');
+      }
+      if (isLike) {
+        await unLikeVideo(id, token);
+        setIsLike(false);
+      } else {
+        await likeVideo(id, token);
+        setIsLike(true);
+      }
+    } catch (error) {
+      console.log('Like/Unlike failed: ', error);
     }
   };
 
@@ -82,7 +105,7 @@ function VideoPage() {
           </div>
 
           <div className={cx('actions')}>
-            <span className={cx('icon-action')}>
+            <span onClick={handleLikeVD} className={cx('icon-action', { active: isLike })}>
               <HeartIcon height="20px" width="20px" />
             </span>
             <p className={cx('count-action')}>{getVideo.likes_count}</p>

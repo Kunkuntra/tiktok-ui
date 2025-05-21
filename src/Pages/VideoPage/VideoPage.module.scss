@@ -105,6 +105,10 @@
   display: flex;
   padding: 16px 32px;
 }
+.active {
+  color: var(--primary);
+}
+
 .icon-action {
   height: 32px;
   width: 32px;

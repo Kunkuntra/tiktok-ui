@@ -51,9 +51,9 @@ function Home() {
 
   return (
     <>
-      {listVideos.map((e, index) => (
-        <VideoContent key={index} {...e} />
-      ))}
+      {listVideos.map((e, index) => {
+        return e.user?.nickname ? <VideoContent key={index} {...e} /> : null;
+      })}
 
       {hasMore && <div ref={loadMoreRef} style={{ height: '40px', background: 'transparent' }} />}
     </>

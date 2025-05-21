@@ -1,30 +1,67 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './UserPage.module.scss';
 import Image from '~/components/Image';
 import Button from '~/components/Button';
-import { useLayoutEffect, useState } from 'react';
 import GridVideos from '../GridVideos';
 import user from '~/services/getUserService';
+import { useAuth } from '~/Contexts/authContext';
+import { followUser, unFollowUser } from '~/services/follow';
 
 const cx = classNames.bind(styles);
 
 function UserPage({ userName }) {
+  const navigate = useNavigate();
   const VIDEOS = 'videos';
   const LIKED_VIDEOS = 'liked';
 
+  const { token } = useAuth();
+
   const [location, setLocation] = useState(VIDEOS);
   const [getUser, setGetUser] = useState(null);
+  const [isFollowing, setIsFollowing] = useState(false);
 
-  useLayoutEffect(() => {
+  console.log('user: ', user);
+  useEffect(() => {
     const fetchApi = async () => {
-      const result = await user(userName);
+      const result = await user(userName, token); // token có thể null
+      // console.log('token page: ', token);
       setGetUser(result);
+      setIsFollowing(result.is_followed);
     };
     fetchApi();
-  }, [userName]);
+  }, [userName, token]);
 
   const handleActiveVideos = () => setLocation(VIDEOS);
   const handleActiveLiked = () => setLocation(LIKED_VIDEOS);
+
+  const handleFollowToggle = async () => {
+    try {
+      if (!token) {
+        alert('Bạn cần đăng nhập để theo dõi.');
+        return navigate('/login');
+      }
+
+      if (isFollowing) {
+        await unFollowUser(getUser.id, token);
+        setIsFollowing(false);
+        setGetUser((prev) => ({
+          ...prev,
+          followers_count: prev.followers_count - 1,
+        }));
+      } else {
+        await followUser(getUser.id, token);
+        setIsFollowing(true);
+        setGetUser((prev) => ({
+          ...prev,
+          followers_count: prev.followers_count + 1,
+        }));
+      }
+    } catch (error) {
+      console.error('Follow/Unfollow failed:', error);
+    }
+  };
 
   if (!getUser) return null;
 
@@ -38,7 +75,9 @@ function UserPage({ userName }) {
               {getUser.last_name} {getUser.first_name}
             </p>
             <p className={cx('nickname')}>{getUser.nickname}</p>
-            <Button primary>Follow</Button>
+            <span onClick={handleFollowToggle}>
+              {isFollowing ? <Button outline>Followed</Button> : <Button primary>Follow</Button>}
+            </span>
           </span>
         </div>
         <div className={cx('popularity')}>

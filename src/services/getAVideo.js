@@ -1,13 +1,13 @@
 import * as callPath from '../utils/httpRequest';
 
-const getAVideo = async (id /** token*/) => {
+const getAVideo = async (id, token) => {
   try {
     const res = await callPath.get(
       `videos/${id}`,
-      // {
-      //     headers: {
-      //         Authorization: token,
-      //     },
+      //   {
+      //   headers: {
+      //     Authorization: token,
+      //   },
       // }
     );
 

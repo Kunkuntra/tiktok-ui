@@ -54,7 +54,6 @@ const MENU_ITEMS = [
 function Header() {
   const { user, logout, isLoadingUser } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
 
   if (isLoadingUser) return <Loading />;
 
