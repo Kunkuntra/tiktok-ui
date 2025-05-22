@@ -10,12 +10,13 @@ import { CommentIcon, FavouriteIcon, HeartIcon } from '~/components/Icons';
 import getAVideo from '~/services/getAVideo';
 import { useAuth } from '~/Contexts/authContext';
 import { likeVideo, unLikeVideo } from '~/services/likeVideo';
+import GetCommentsVideo from './GetCommentsVideo';
 
 const cx = classNames.bind(styles);
 
 function VideoPage() {
   const { id } = useParams();
-  console.log(id);
+  // console.log(id);
   const navigate = useNavigate();
 
   const [isPlay, setIsPlay] = useState(false);
@@ -120,7 +121,9 @@ function VideoPage() {
           </div>
         </div>
         <div className={cx('comment')}>
-          <div className={cx('comment-display')}></div>
+          <div className={cx('comment-display')}>
+            <GetCommentsVideo id={getVideo.id} />
+          </div>
           <div className={cx('wrap-input')}>
             <input className={cx('input')}></input>
             <Button small>Post</Button>

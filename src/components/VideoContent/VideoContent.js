@@ -56,6 +56,7 @@ const VideoContent = forwardRef((props, ref) => {
   //   };
   //   fetchApi();
   // }, [user.nickname]);
+
   useEffect(() => {
     if (!id) return;
     const fetApi = async () => {
