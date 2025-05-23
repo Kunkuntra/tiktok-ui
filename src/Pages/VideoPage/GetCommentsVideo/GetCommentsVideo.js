@@ -12,21 +12,29 @@ function GetCommentsVideo({ id }) {
   const [datas, setDatas] = useState([]);
   const { token } = useAuth();
 
+  console.log('token: ', token);
   useEffect(() => {
     if (!id) return;
+
     const fetchApi = async () => {
       try {
-        const result = await comments(id); // assume this returns an array of comments
-        setDatas(result);
+        const result = await comments(id);
+        const safeArray = Array.isArray(result) ? result : Array.isArray(result?.data) ? result.data : [];
+        // console.log('safeArray: ', safeArray);
+        // console.log('result: ', result);
+        // console.log('id: ', id);
+        setDatas(safeArray);
       } catch (error) {
         console.error('Failed to fetch comments:', error);
+        setDatas([]);
       }
     };
+
     fetchApi();
   }, [id, token]);
 
   const handleLikeToggle = async (commentId) => {
-    if (!token) {
+    if (!token || token === '') {
       alert('Bạn cần đăng nhập để thả tim.');
       return;
     }
@@ -34,10 +42,11 @@ function GetCommentsVideo({ id }) {
     setDatas((prev) =>
       prev.map((comment) => {
         if (comment.id === commentId) {
+          const isLikedNow = !comment.is_liked;
           return {
             ...comment,
-            is_liked: !comment.is_liked,
-            likes_count: comment.is_liked ? comment.likes_count - 1 : comment.likes_count + 1,
+            is_liked: isLikedNow,
+            likes_count: isLikedNow ? comment.likes_count + 1 : comment.likes_count - 1,
           };
         }
         return comment;
@@ -46,7 +55,7 @@ function GetCommentsVideo({ id }) {
 
     try {
       const comment = datas.find((c) => c.id === commentId);
-      if (comment.is_liked) {
+      if (comment?.is_liked) {
         await unLikeComment(commentId, token);
       } else {
         await likeComment(commentId, token);
@@ -55,6 +64,8 @@ function GetCommentsVideo({ id }) {
       console.error('Toggle like failed:', error);
     }
   };
+
+  if (!Array.isArray(datas) || datas.length === 0) return null;
 
   return (
     <>

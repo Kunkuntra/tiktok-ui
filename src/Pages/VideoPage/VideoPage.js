@@ -11,6 +11,9 @@ import getAVideo from '~/services/getAVideo';
 import { useAuth } from '~/Contexts/authContext';
 import { likeVideo, unLikeVideo } from '~/services/likeVideo';
 import GetCommentsVideo from './GetCommentsVideo';
+import postComment from '~/services/postComment';
+import user from '~/services/getUserService';
+import { followUser, unFollowUser } from '~/services/follow';
 
 const cx = classNames.bind(styles);
 
@@ -22,16 +25,23 @@ function VideoPage() {
   const [isPlay, setIsPlay] = useState(false);
   const [isMute, setIsMute] = useState(true);
   const [isLike, setIsLike] = useState(false);
+  const [content, setContent] = useState('');
+  const [isFollowing, setIsFollowing] = useState(false);
   const videoRef = useRef();
+  const inputRef = useRef();
   const { token } = useAuth();
 
   const [getVideo, setGetVideo] = useState();
+
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await getAVideo(id);
-      // console.log(result);
-      setGetVideo(result);
-      setIsLike(result.is_liked);
+      try {
+        const result = await getAVideo(id);
+        setGetVideo(result);
+        setIsLike(result.is_liked);
+      } catch (err) {
+        console.error('getAVideo error:', err);
+      }
     };
     fetchApi();
   }, [id]);
@@ -55,7 +65,7 @@ function VideoPage() {
   };
   const handleLikeVD = async () => {
     try {
-      if (!token) {
+      if (!token || token === '') {
         alert('Bạn cần đăng nhập để thả tim.');
         return navigate('/login');
       }
@@ -68,6 +78,51 @@ function VideoPage() {
       }
     } catch (error) {
       console.log('Like/Unlike failed: ', error);
+    }
+  };
+  const handlePostComment = async () => {
+    try {
+      if (!token || token === '') {
+        alert('Bạn cần đăng nhập để thả tim.');
+        return navigate('/login');
+      }
+      await postComment(id, content, token);
+      setContent('');
+    } catch (error) {
+      console.log('comment failed: ', error);
+    }
+  };
+
+  useEffect(() => {
+    if (!token || token === '' || !getVideo || !getVideo.user?.nickname) return;
+
+    const fetchApi = async () => {
+      try {
+        const result = await user(getVideo.user.nickname, token);
+        setIsFollowing(!!result.is_followed);
+      } catch (err) {
+        console.error('Failed to fetch follow status:', err);
+      }
+    };
+
+    fetchApi();
+  }, [getVideo, token]);
+  const handleFollowToggle = async () => {
+    if (!token || token === '') {
+      alert('Bạn cần đăng nhập để theo dõi.');
+      return navigate('/login');
+    }
+
+    try {
+      if (isFollowing) {
+        await unFollowUser(getVideo.user.id, token);
+        setIsFollowing(false);
+      } else {
+        await followUser(getVideo.user.id, token);
+        setIsFollowing(true);
+      }
+    } catch (error) {
+      console.error('Follow/Unfollow failed:', error);
     }
   };
 
@@ -96,7 +151,15 @@ function VideoPage() {
                 </p>
                 <span className={cx('day-upload')}>{getVideo.published_at}</span>
               </div>
-              <Button primary>Follow</Button>
+              {isFollowing ? (
+                <Button outline onClick={handleFollowToggle}>
+                  Followed
+                </Button>
+              ) : (
+                <Button primary onClick={handleFollowToggle}>
+                  Follow
+                </Button>
+              )}
             </div>
             <p className={cx('description')}> {getVideo.description} </p>
             <span className={cx('music')}>
@@ -125,8 +188,15 @@ function VideoPage() {
             <GetCommentsVideo id={getVideo.id} />
           </div>
           <div className={cx('wrap-input')}>
-            <input className={cx('input')}></input>
-            <Button small>Post</Button>
+            <input
+              ref={inputRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className={cx('input')}
+            />
+            <Button onClick={handlePostComment} small>
+              Post
+            </Button>
           </div>
         </div>
       </div>

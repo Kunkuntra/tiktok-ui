@@ -17,6 +17,7 @@ function UserPage({ userName }) {
   const LIKED_VIDEOS = 'liked';
 
   const { token } = useAuth();
+  console.log('token: ', token);
 
   const [location, setLocation] = useState(VIDEOS);
   const [getUser, setGetUser] = useState(null);
@@ -25,10 +26,13 @@ function UserPage({ userName }) {
   console.log('user: ', user);
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await user(userName, token); // token có thể null
+      const result = await user(userName); // token có thể null
       // console.log('token page: ', token);
+      console.log('result: ', result);
       setGetUser(result);
-      setIsFollowing(result.is_followed);
+      let follow = false;
+      if (!!result.is_followed) follow = result.is_followed;
+      setIsFollowing(follow);
     };
     fetchApi();
   }, [userName, token]);

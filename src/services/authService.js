@@ -13,17 +13,9 @@ export const loginUser = async (email, password) => {
   }
 };
 
-export const logout = async (token) => {
+export const logout = async () => {
   try {
-    const res = await callPath.post(
-      'auth/logout',
-      {},
-      {
-        headers: {
-          Authorization: token,
-        },
-      },
-    );
+    const res = await callPath.post('auth/logout', {});
     return res;
   } catch (err) {
     return { errorCode: err.response.status };

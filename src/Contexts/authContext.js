@@ -1,36 +1,38 @@
-/* eslint-disable no-unused-vars */
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem('authToken'));
+  const [token, setToken] = useState(() => localStorage.getItem('authToken') || '');
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('authUser');
     return savedUser ? JSON.parse(savedUser) : null;
   });
+
+  // eslint-disable-next-line no-unused-vars
   const [isLoadingUser, setIsLoadingUser] = useState(false);
 
   useEffect(() => {
+    const savedToken = localStorage.getItem('authToken');
+    setToken(savedToken ?? ''); // fallback chuỗi rỗng nếu null
+
     const savedUser = localStorage.getItem('authUser');
     setUser(savedUser ? JSON.parse(savedUser) : null);
-  }, [token]);
+  }, []);
 
   const login = ({ token, data }) => {
-    console.log('new token: ', token);
-    console.log('data: ', data);
+    const safeToken = token || '';
+    setToken(safeToken);
+    setUser(data);
 
-    setToken(token);
-    setUser(data); // data = { id, name }
-
-    localStorage.setItem('authToken', token);
+    localStorage.setItem('authToken', safeToken);
     localStorage.setItem('authUser', JSON.stringify(data));
   };
 
   const logout = () => {
-    setToken(null);
+    setToken('');
     setUser(null);
-    localStorage.removeItem('authToken');
+    localStorage.setItem('authToken', ''); // overwrite thành chuỗi rỗng
     localStorage.removeItem('authUser');
   };
 
@@ -43,4 +45,21 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    // fallback khi context lỗi
+    return {
+      token: '',
+      user: null,
+      isAuthenticated: false,
+      isLoadingUser: false,
+      login: () => {},
+      logout: () => {},
+    };
+  }
+
+  const finalToken = context.token ?? '';
+  return { ...context, token: finalToken };
+};

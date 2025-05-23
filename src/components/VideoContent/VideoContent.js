@@ -28,7 +28,7 @@ const VideoContent = forwardRef((props, ref) => {
 
   const handleFollowToggle = async () => {
     try {
-      if (!token) {
+      if (!token || token === '') {
         alert('Bạn cần đăng nhập để theo dõi.');
         return navigate('/login');
       }
@@ -70,7 +70,7 @@ const VideoContent = forwardRef((props, ref) => {
 
   const handleLikeVD = async () => {
     try {
-      if (!token) {
+      if (!token || token === '') {
         alert('Bạn cần đăng nhập để thả tim.');
         return navigate('/login');
       }

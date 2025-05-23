@@ -1,6 +1,6 @@
 import * as callPath from '../utils/httpRequest';
 
-const suggest = async (numPage, perPage /**token */) => {
+const suggest = async (numPage, perPage) => {
   try {
     // const res = await callPath.get(`/users/suggested?page=${numPage}&per_page=${perPage}`)
     const res = await callPath.get('/users/suggested', {
@@ -8,9 +8,6 @@ const suggest = async (numPage, perPage /**token */) => {
         page: numPage,
         per_page: perPage,
       },
-      // headers: {
-      //     Authorization: token
-      // }
     });
 
     return res.data;

@@ -7,10 +7,12 @@ export const request = axios.create({
 // Interceptor để tự động thêm token
 request.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    let token = localStorage.getItem('authToken');
+    // const test = '';
+    // console.log('token: ', token);
+    // console.log('test: ', test);
+    if (!token) token = '';
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error),

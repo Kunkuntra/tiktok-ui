@@ -1,16 +1,8 @@
 import * as CallPath from '../utils/httpRequest';
 
-export const likeComment = async (id, token) => {
+export const likeComment = async (id) => {
   try {
-    const res = await CallPath.post(
-      `comments/${id}/like`,
-      [],
-      //     {
-      //     headers: {
-      //         Authorization: token,
-      //     },
-      // }
-    );
+    const res = await CallPath.post(`comments/${id}/like`, []);
 
     return res.data;
   } catch (err) {

@@ -1,16 +1,8 @@
 import * as callPath from '../utils/httpRequest';
 
-const comments = async (id, token) => {
+const comments = async (id) => {
   try {
-    const res = await callPath.get(
-      `videos/${id}/comments`,
-      // {
-      //     headers: {
-      //         Authorization: token,
-      //     }
-      // }
-    );
-
+    const res = await callPath.get(`videos/${id}/comments`);
     return res.data;
   } catch (err) {
     return { errorCode: err.response.status };

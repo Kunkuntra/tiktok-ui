@@ -1,6 +1,6 @@
 import * as callPath from '../utils/httpRequest';
 
-export const getUser = async (nickname, token) => {
+export const getUser = async (nickname) => {
   try {
     const res = await callPath.get(`/users/${nickname}`);
     return res.data;
@@ -10,14 +10,10 @@ export const getUser = async (nickname, token) => {
   }
 };
 
-const user = async (nickname, token) => {
+const user = async (nickname) => {
   try {
     // const res = await callPath.get(`/users/${nickname}?headers=`)
-    const res = await callPath.get(`/users/${nickname}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
+    const res = await callPath.get(`/users/${nickname}`);
 
     return res.data;
   } catch (err) {
