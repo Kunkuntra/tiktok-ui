@@ -9,12 +9,14 @@ export function AuthProvider({ children }) {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // eslint-disable-next-line no-unused-vars
   const [isLoadingUser, setIsLoadingUser] = useState(false);
+
+  const [dataForm, setDataForm] = useState(null);
+  const [openFormDiscard, setOpenFormDiscard] = useState(false);
 
   useEffect(() => {
     const savedToken = localStorage.getItem('authToken');
-    setToken(savedToken ?? ''); // fallback chuỗi rỗng nếu null
+    setToken(savedToken ?? '');
 
     const savedUser = localStorage.getItem('authUser');
     setUser(savedUser ? JSON.parse(savedUser) : null);
@@ -32,14 +34,27 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setToken('');
     setUser(null);
-    localStorage.setItem('authToken', ''); // overwrite thành chuỗi rỗng
+    localStorage.setItem('authToken', '');
     localStorage.removeItem('authUser');
   };
 
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ token, user, isAuthenticated, isLoadingUser, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        isAuthenticated,
+        isLoadingUser,
+        login,
+        logout,
+        dataForm,
+        setDataForm,
+        openFormDiscard,
+        setOpenFormDiscard,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

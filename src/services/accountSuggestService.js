@@ -12,7 +12,7 @@ const suggest = async (numPage, perPage) => {
 
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.log('error in get accounts process: ', err);
   }
 };
 

@@ -1,9 +1,11 @@
+import ViewUpload from '~/components/ViewUpload';
+
 function Upload() {
-    return (
-        <div>
-            <h2>Upload Page</h2>
-        </div>
-    );
+  return (
+    <div>
+      <ViewUpload />
+    </div>
+  );
 }
 
 export default Upload;
