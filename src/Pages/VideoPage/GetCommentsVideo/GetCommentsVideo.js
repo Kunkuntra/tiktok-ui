@@ -8,7 +8,7 @@ import { likeComment, unLikeComment } from '~/services/commentActions';
 
 const cx = classNames.bind(styles);
 
-function GetCommentsVideo({ id }) {
+function GetCommentsVideo({ id, refreshTrigger }) {
   const [datas, setDatas] = useState([]);
   const { token } = useAuth();
 
@@ -20,9 +20,6 @@ function GetCommentsVideo({ id }) {
       try {
         const result = await comments(id);
         const safeArray = Array.isArray(result) ? result : Array.isArray(result?.data) ? result.data : [];
-        // console.log('safeArray: ', safeArray);
-        // console.log('result: ', result);
-        // console.log('id: ', id);
         setDatas(safeArray);
       } catch (error) {
         console.error('Failed to fetch comments:', error);
@@ -31,7 +28,7 @@ function GetCommentsVideo({ id }) {
     };
 
     fetchApi();
-  }, [id, token]);
+  }, [id, token, refreshTrigger]);
 
   const handleLikeToggle = async (commentId) => {
     if (!token || token === '') {

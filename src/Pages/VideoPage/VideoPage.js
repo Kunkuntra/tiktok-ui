@@ -27,6 +27,7 @@ function VideoPage() {
   const [isLike, setIsLike] = useState(false);
   const [content, setContent] = useState('');
   const [isFollowing, setIsFollowing] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const videoRef = useRef();
   const inputRef = useRef();
   const { token } = useAuth();
@@ -88,6 +89,7 @@ function VideoPage() {
       }
       await postComment(id, content, token);
       setContent('');
+      setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
       console.log('comment failed: ', error);
     }
@@ -185,7 +187,7 @@ function VideoPage() {
         </div>
         <div className={cx('comment')}>
           <div className={cx('comment-display')}>
-            <GetCommentsVideo id={getVideo.id} />
+            <GetCommentsVideo id={getVideo.id} refreshTrigger={refreshTrigger} />
           </div>
           <div className={cx('wrap-input')}>
             <input

@@ -7,7 +7,7 @@ const uploadVideo = async (des, file, thumbnail_time = 0, music = '', view_mode 
     // console.log('thumbnail_time: ', thumbnail_time);
     // console.log('music: ', music);
     // console.log('view_mode: ', view_mode);
-    // console.log('data: ', data);
+    console.log('data: ', data);
     // console.log('token: ', token);
     // console.log('test: ', {
     //   description: des,

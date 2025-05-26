@@ -6,6 +6,7 @@ import classNames from 'classnames/bind';
 import styles from './SuggestedAccounts.module.scss';
 import AccountItem from './AccountItem';
 import suggest from '~/services/accountSuggestService';
+import following from '~/services/accountFollowingService';
 
 const cx = classNames.bind(styles);
 
@@ -17,11 +18,16 @@ function SuggestedAccounts({ label, isFollow = false }) {
 
   useEffect(() => {
     const fetchApi = async () => {
-      const result = await suggest(INIT_PAGE, endPage);
+      let result;
+      if (isFollow) {
+        result = await following(INIT_PAGE, endPage);
+      } else {
+        result = await suggest(INIT_PAGE, endPage);
+      }
       setAccounts(result);
     };
     fetchApi();
-  }, [endPage]);
+  }, [endPage, isFollow]);
 
   const handleClickMore = () => {
     setSeeMoreBtn(!seeMoreBtn);
