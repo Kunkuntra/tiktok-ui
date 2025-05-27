@@ -13,6 +13,8 @@ import { followUser, unFollowUser } from '~/services/follow';
 // import { getUser } from '~/services/getUserService';
 import { likeVideo, unLikeVideo } from '~/services/likeVideo';
 import getAVideo from '~/services/getAVideo';
+import postComment from '~/services/postComment';
+import GetCommentsVideo from '~/pages/VideoPage/GetCommentsVideo';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +22,9 @@ const VideoContent = forwardRef((props, ref) => {
   const { id, user, description, file_url, shares_count, comments_count, likes_count } = props;
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLike, setIsLike] = useState(false);
+  const [isComment, setIsComment] = useState(false);
+  const [content, setContent] = useState('');
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const { token } = useAuth();
   const navigate = useNavigate();
@@ -86,50 +91,84 @@ const VideoContent = forwardRef((props, ref) => {
     }
   };
 
+  const handlePostComment = async () => {
+    try {
+      if (!token || token === '') {
+        alert('Bạn cần đăng nhập để thả tim.');
+        return navigate('/login');
+      }
+      await postComment(id, content, token);
+      setContent('');
+      setRefreshTrigger((prev) => prev + 1);
+    } catch (error) {
+      console.log('comment failed: ', error);
+    }
+  };
+
   return (
-    <div className={cx('wrapper')} ref={ref}>
-      <header className={cx('header')}>
-        <Image className={cx('avatar')} src={user.avatar} alt="" />
-        <p className={cx('info')}>
-          <Link to={`/@${user.nickname}`} className={cx('info-name')}>
-            {user.first_name} {user.last_name}
-          </Link>
-          <span className={cx('desc-video')}>{description}</span>
-        </p>
-        <span onClick={handleFollowToggle}>
-          {isFollowing ? <Button outline>Followed</Button> : <Button outline>Follow</Button>}
-        </span>
-      </header>
-      <div className={cx('video-content')}>
-        <Video idVideo={id} linkvid={file_url} />
-        <div className={cx('list-actions')}>
-          <span className={cx('item-action')}>
-            <button className={cx('icon')}>
-              <ShareIcon />
-            </button>
-            <p className={cx('count')}>{shares_count}</p>
+    <>
+      <div className={cx('wrapper')} ref={ref}>
+        <header className={cx('header')}>
+          <Image className={cx('avatar')} src={user.avatar} alt="" />
+          <p className={cx('info')}>
+            <Link to={`/@${user.nickname}`} className={cx('info-name')}>
+              {user.first_name} {user.last_name}
+            </Link>
+            <span className={cx('desc-video')}>{description}</span>
+          </p>
+          <span onClick={handleFollowToggle}>
+            {isFollowing ? <Button outline>Followed</Button> : <Button outline>Follow</Button>}
           </span>
-          <span className={cx('item-action')}>
-            <button className={cx('icon')}>
-              <FavouriteIcon />
-            </button>
-            <p className={cx('count')}>20</p>
-          </span>
-          <span className={cx('item-action')}>
-            <button className={cx('icon')}>
-              <CommentIcon />
-            </button>
-            <p className={cx('count')}>{comments_count}</p>
-          </span>
-          <span className={cx('item-action')}>
-            <button onClick={handleLikeVD} className={cx('icon', { active: isLike })}>
-              <HeartIcon />
-            </button>
-            <p className={cx('count')}>{likes_count}</p>
-          </span>
+        </header>
+        <div className={cx('video-content')}>
+          <Video idVideo={id} linkvid={file_url} />
+          <div className={cx('list-actions')}>
+            <span className={cx('item-action')}>
+              <button className={cx('icon')}>
+                <ShareIcon />
+              </button>
+              <p className={cx('count')}>{shares_count}</p>
+            </span>
+            <span className={cx('item-action')}>
+              <button className={cx('icon')}>
+                <FavouriteIcon />
+              </button>
+              <p className={cx('count')}>20</p>
+            </span>
+            <span className={cx('item-action')}>
+              <button onClick={() => setIsComment(!isComment)} className={cx('icon')}>
+                <CommentIcon />
+              </button>
+              <p className={cx('count')}>{comments_count}</p>
+            </span>
+            <span className={cx('item-action')}>
+              <button onClick={handleLikeVD} className={cx('icon', { active: isLike })}>
+                <HeartIcon />
+              </button>
+              <p className={cx('count')}>{likes_count}</p>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+      {isComment && (
+        <div className={cx('commemt-wrap')}>
+          <div className={cx('content-cmt')}>
+            <span onClick={() => setIsComment(!isComment)} className={cx('close-btn')}>
+              x
+            </span>
+            <div className={cx('display-cmt')}>
+              <GetCommentsVideo id={id} refreshTrigger={refreshTrigger} />
+            </div>
+            <div className={cx('wrap-input')}>
+              <input value={content} onChange={(e) => setContent(e.target.value)} className={cx('input')} />
+              <Button onClick={handlePostComment} small>
+                Post
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 });
 
