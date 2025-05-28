@@ -13,6 +13,8 @@ export function AuthProvider({ children }) {
 
   const [dataForm, setDataForm] = useState(null);
   const [openFormDiscard, setOpenFormDiscard] = useState(false);
+  const [openFormDelete, setOpenFormDelete] = useState(false);
+  const [openFormEdit, setOpenFormEdit] = useState(false);
 
   useEffect(() => {
     const savedToken = localStorage.getItem('authToken');
@@ -49,10 +51,14 @@ export function AuthProvider({ children }) {
         isLoadingUser,
         login,
         logout,
+        openFormDelete,
+        setOpenFormDelete,
         dataForm,
         setDataForm,
         openFormDiscard,
         setOpenFormDiscard,
+        openFormEdit,
+        setOpenFormEdit,
       }}
     >
       {children}
